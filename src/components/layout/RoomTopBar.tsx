@@ -77,13 +77,13 @@ export const RoomTopBar: React.FC = () => {
           className="text-center hidden sm:block"
         >
           <div
-            className="text-sm font-bold tracking-wide"
-            style={{ color: timeColors[timeOfDay] ?? '#A78BFA', textShadow: '0 0 12px currentColor' }}
+            className="text-xs sm:text-sm font-extrabold tracking-wide"
+            style={{ color: timeColors[timeOfDay] ?? '#A78BFA', textShadow: '0 0 14px currentColor' }}
           >
             {greeting}
           </div>
-          <div className="text-[9px] text-white/50 tracking-widest uppercase">
-            Your Dream Awaits
+          <div className="text-[9.5px] text-dream-gold/80 tracking-widest font-semibold uppercase mt-0.5">
+            Ready for tonight's magical adventure?
           </div>
         </motion.div>
 

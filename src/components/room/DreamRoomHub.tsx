@@ -12,8 +12,10 @@ import { RoomFireplace } from './RoomFireplace';
 import { RoomFloor } from './RoomFloor';
 import { RoomTopBar } from '../layout/RoomTopBar';
 import { FloatingDock } from '../layout/FloatingDock';
+import { FloatingMusicPlayer } from '../layout/FloatingMusicPlayer';
 import { MagicDustCursor } from './MagicDustCursor';
 import { ShootingStarNotifier } from './ShootingStarNotifier';
+import { InteractiveToyBox } from './InteractiveToyBox';
 
 /* ─── Wall ambient fireflies ─── */
 const AMBIENT_FIREFLIES = Array.from({ length: 10 }, (_, i) => ({
@@ -252,8 +254,9 @@ export const DreamRoomHub: React.FC = () => {
               <RoomDesk />
             </div>
 
-            {/* ── RIGHT ZONE: Bookshelf ── */}
-            <div className="flex flex-col items-end justify-end w-[28%] h-full pb-2">
+            {/* ── RIGHT ZONE: Bookshelf & Toy Box ── */}
+            <div className="flex flex-col items-end justify-end gap-3 w-[28%] h-full pb-2">
+              <InteractiveToyBox />
               <RoomBookshelf />
             </div>
           </div>
@@ -275,7 +278,10 @@ export const DreamRoomHub: React.FC = () => {
       {/* ── Shooting Star Notifier (random collectible) ── */}
       <ShootingStarNotifier />
 
-      {/* ── Floating Dock (always on top) ── */}
+      {/* ── Floating Music Player (Bottom-Left) ── */}
+      <FloatingMusicPlayer />
+
+      {/* ── Floating Dock (Bottom-Center) ── */}
       <FloatingDock />
     </>
   );

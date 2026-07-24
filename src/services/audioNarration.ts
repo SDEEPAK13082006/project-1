@@ -3,7 +3,11 @@
 class SoundscapeSynthesizer {
   private ctx: AudioContext | null = null;
   private currentOscillators: OscillatorNode[] = [];
+  private currentBufferSource: AudioBufferSourceNode | null = null;
   private gainNode: GainNode | null = null;
+  private masterVolume: number = 0.7;
+  private activeTrack: string = 'Rain';
+  private playing: boolean = false;
 
   private initCtx() {
     if (!this.ctx) {
@@ -17,7 +21,26 @@ class SoundscapeSynthesizer {
     }
   }
 
-  public playSoundEffect(type: 'click' | 'pageturn' | 'magicChime') {
+  public setVolume(vol: number) {
+    this.masterVolume = Math.max(0, Math.min(1, vol));
+    if (this.gainNode && this.ctx) {
+      this.gainNode.gain.setValueAtTime(this.masterVolume * 0.1, this.ctx.currentTime);
+    }
+  }
+
+  public getVolume(): number {
+    return this.masterVolume;
+  }
+
+  public getActiveTrack(): string {
+    return this.activeTrack;
+  }
+
+  public isAudioPlaying(): boolean {
+    return this.playing;
+  }
+
+  public playSoundEffect(type: 'click' | 'pageturn' | 'magicChime' | 'wand') {
     this.initCtx();
     if (!this.ctx) return;
 
@@ -26,7 +49,7 @@ class SoundscapeSynthesizer {
 
     if (type === 'click') {
       osc.frequency.setValueAtTime(400, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.05 * this.masterVolume, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -36,17 +59,17 @@ class SoundscapeSynthesizer {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(200, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.04 * this.masterVolume, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
       osc.stop(this.ctx.currentTime + 0.15);
-    } else if (type === 'magicChime') {
+    } else if (type === 'magicChime' || type === 'wand') {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(1046.50, this.ctx.currentTime + 0.4);
-      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.08 * this.masterVolume, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -57,17 +80,25 @@ class SoundscapeSynthesizer {
 
   public playAmbient(type: string) {
     this.stopAmbient();
-    if (type === 'Off') return;
+    if (type === 'Off') {
+      this.playing = false;
+      return;
+    }
 
+    this.activeTrack = type;
+    this.playing = true;
     this.initCtx();
     if (!this.ctx) return;
 
     this.gainNode = this.ctx.createGain();
-    this.gainNode.gain.setValueAtTime(0.07, this.ctx.currentTime);
+    this.gainNode.gain.setValueAtTime(this.masterVolume * 0.1, this.ctx.currentTime);
     this.gainNode.connect(this.ctx.destination);
 
-    if (type === 'Forest' || type === 'Campfire') {
-      const freqs = type === 'Forest' ? [261.63, 329.63, 392.00, 523.25] : [196.00, 246.94, 293.66, 392.00];
+    if (type === 'Forest' || type === 'Campfire' || type === 'Lullaby' || type === 'Space' || type === 'Default') {
+      const freqs = type === 'Forest' ? [261.63, 329.63, 392.00, 523.25]
+        : type === 'Lullaby' ? [196.00, 293.66, 349.23, 440.00]
+        : type === 'Space' ? [130.81, 196.00, 261.63, 329.63]
+        : [196.00, 246.94, 293.66, 392.00];
       freqs.forEach((freq, idx) => {
         if (!this.ctx || !this.gainNode) return;
         const osc = this.ctx.createOscillator();
@@ -94,14 +125,20 @@ class SoundscapeSynthesizer {
       whiteNoise.loop = true;
       whiteNoise.connect(this.gainNode);
       whiteNoise.start();
+      this.currentBufferSource = whiteNoise;
     }
   }
 
   public stopAmbient() {
+    this.playing = false;
     this.currentOscillators.forEach(osc => {
       try { osc.stop(); } catch {}
     });
     this.currentOscillators = [];
+    if (this.currentBufferSource) {
+      try { this.currentBufferSource.stop(); } catch {}
+      this.currentBufferSource = null;
+    }
     if (this.gainNode) {
       try { this.gainNode.disconnect(); } catch {}
       this.gainNode = null;

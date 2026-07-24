@@ -7,12 +7,12 @@ import { EnvironmentProvider } from './context/EnvironmentContext';
 
 import { GlobalDreamBackground } from './components/common/GlobalDreamBackground';
 import { FloatingDock } from './components/layout/FloatingDock';
+import { FloatingMusicPlayer } from './components/layout/FloatingMusicPlayer';
+import { RoomTopBar } from './components/layout/RoomTopBar';
 import { AuthModal } from './components/layout/AuthModal';
 
-import { TimeOfDayHeader } from './components/environment/TimeOfDayHeader';
 import { WeatherEffects } from './components/environment/WeatherEffects';
 import { SleepModeOverlay } from './components/environment/SleepModeOverlay';
-import { EnvironmentManagerBar } from './components/environment/EnvironmentManagerBar';
 
 import { DreamRoomHub } from './components/room/DreamRoomHub';
 import { DreamForestHub } from './components/forest/DreamForestHub';
@@ -70,15 +70,13 @@ const AppInner: React.FC = () => {
           <WeatherEffects />
           {/* Sleep Mode Overlay & Countdown Banner */}
           <SleepModeOverlay />
-          {/* Top Dynamic Time of Day & Greeting Bar */}
-          <TimeOfDayHeader />
-          {/* Environment Weather & Sleep Timer Bar */}
-          <EnvironmentManagerBar />
+          {/* Unified Room Top Bar */}
+          <RoomTopBar />
         </>
       )}
 
       {/* Main Content Area */}
-      <div className={isRoom ? 'relative z-10' : 'relative z-10 pb-28 pt-2'}>
+      <div className={isRoom ? 'relative z-10' : 'relative z-10 pb-28 pt-16'}>
         <Routes>
           {/* Primary Interactive Dream Room Hub */}
           <Route path="/" element={<DreamRoomHub />} />
@@ -107,8 +105,19 @@ const AppInner: React.FC = () => {
         </Routes>
       </div>
 
-      {/* Floating Bottom Glass Navigation Dock (non-room pages) */}
-      {!isRoom && <FloatingDock />}
+      {/* Floating Bottom Music Player & Glass Dock (non-room pages) */}
+      {!isRoom && (
+        <>
+          <FloatingMusicPlayer />
+          <FloatingDock />
+        </>
+      )}
+
+      {/* Auth Modal */}
+      <AuthModal />
+    </div>
+  );
+};
 
       {/* Auth Modal */}
       <AuthModal />
