@@ -28,12 +28,14 @@ interface EnvironmentContextType {
   clickMoon: () => void;
   isSleepMode: boolean;
   setIsSleepMode: (sleep: boolean) => void;
+  toggleSleepMode: () => void;
   sleepTimer: SleepTimerOption;
   setSleepTimer: (timer: SleepTimerOption) => void;
   reduceMotion: boolean;
   setReduceMotion: (reduce: boolean) => void;
   muteAudio: boolean;
   setMuteAudio: (mute: boolean) => void;
+  greeting: string;
 }
 
 const EnvironmentContext = createContext<EnvironmentContextType | undefined>(undefined);
@@ -76,6 +78,17 @@ export const EnvironmentProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setMoonClickCount(prev => prev + 1);
   };
 
+  const toggleSleepMode = () => setIsSleepMode(prev => !prev);
+
+  const greeting = (() => {
+    switch (timeOfDay) {
+      case 'Morning': return '🌅 Good Morning, Dreamer!';
+      case 'Afternoon': return '☀️ Good Afternoon, Adventurer!';
+      case 'Evening': return '🌇 Good Evening, Storyteller!';
+      default: return '🌙 Good Night, Dream Explorer!';
+    }
+  })();
+
   return (
     <EnvironmentContext.Provider
       value={{
@@ -101,12 +114,14 @@ export const EnvironmentProvider: React.FC<{ children: React.ReactNode }> = ({ c
         clickMoon,
         isSleepMode,
         setIsSleepMode,
+        toggleSleepMode,
         sleepTimer,
         setSleepTimer,
         reduceMotion,
         setReduceMotion,
         muteAudio,
-        setMuteAudio
+        setMuteAudio,
+        greeting,
       }}
     >
       {children}

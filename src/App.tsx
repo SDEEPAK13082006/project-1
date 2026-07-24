@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { StoryProvider, useStory } from './context/StoryContext';
@@ -55,6 +55,67 @@ const CreateStoryFlow: React.FC = () => {
   );
 };
 
+/** Determines if the current route is the Dream Room (fullscreen, self-contained) */
+const AppInner: React.FC = () => {
+  const location = useLocation();
+  const isRoom = location.pathname === '/' || location.pathname === '/room';
+
+  return (
+    <div className="min-h-screen flex flex-col justify-between selection:bg-dream-purple/30 text-slate-100 relative overflow-x-hidden">
+      {!isRoom && (
+        <>
+          {/* Global Animated Disney/Ghibli Background */}
+          <GlobalDreamBackground />
+          {/* Weather Effects Particle Overlay */}
+          <WeatherEffects />
+          {/* Sleep Mode Overlay & Countdown Banner */}
+          <SleepModeOverlay />
+          {/* Top Dynamic Time of Day & Greeting Bar */}
+          <TimeOfDayHeader />
+          {/* Environment Weather & Sleep Timer Bar */}
+          <EnvironmentManagerBar />
+        </>
+      )}
+
+      {/* Main Content Area */}
+      <div className={isRoom ? 'relative z-10' : 'relative z-10 pb-28 pt-2'}>
+        <Routes>
+          {/* Primary Interactive Dream Room Hub */}
+          <Route path="/" element={<DreamRoomHub />} />
+          <Route path="/room" element={<DreamRoomHub />} />
+
+          {/* 12 Story Worlds Catalog & Realm Detail */}
+          <Route path="/worlds" element={<StoryWorldsGrid />} />
+          <Route path="/world/:id" element={<WorldRealmDetail />} />
+
+          <Route path="/forest" element={<DreamForestHub />} />
+          <Route path="/create" element={<CreateStoryFlow />} />
+          <Route path="/generate" element={<CreateStoryFlow />} />
+          <Route path="/story/:id" element={<StoryViewPage />} />
+          <Route path="/library" element={<WoodenBookshelf />} />
+          <Route path="/my-stories" element={<WoodenBookshelf />} />
+          <Route path="/narrator" element={<StoryViewPage />} />
+          <Route path="/rewards" element={<TreasureRoom />} />
+          <Route path="/achievements" element={<TreasureRoom />} />
+          <Route path="/parents" element={<ParentDashboardPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/profile" element={<ChildBedroom />} />
+          <Route path="/login" element={<AuthPage />} />
+        </Routes>
+      </div>
+
+      {/* Floating Bottom Glass Navigation Dock (non-room pages) */}
+      {!isRoom && <FloatingDock />}
+
+      {/* Auth Modal */}
+      <AuthModal />
+    </div>
+  );
+};
+
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
@@ -62,59 +123,7 @@ export const App: React.FC = () => {
         <StoryProvider>
           <EnvironmentProvider>
             <Router>
-              <div className="min-h-screen flex flex-col justify-between selection:bg-dream-purple/30 text-slate-100 relative overflow-x-hidden">
-                
-                {/* Global Animated Disney/Ghibli Background */}
-                <GlobalDreamBackground />
-
-                {/* Weather Effects Particle Overlay */}
-                <WeatherEffects />
-
-                {/* Sleep Mode Overlay & Countdown Banner */}
-                <SleepModeOverlay />
-
-                {/* Top Dynamic Time of Day & Greeting Bar */}
-                <TimeOfDayHeader />
-
-                {/* Environment Weather & Sleep Timer Bar */}
-                <EnvironmentManagerBar />
-
-                {/* Main Content Area */}
-                <div className="relative z-10 pb-28 pt-2">
-                  <Routes>
-                    {/* Primary Interactive Dream Room Hub */}
-                    <Route path="/" element={<DreamRoomHub />} />
-                    <Route path="/room" element={<DreamRoomHub />} />
-                    
-                    {/* 12 Story Worlds Catalog & Realm Detail */}
-                    <Route path="/worlds" element={<StoryWorldsGrid />} />
-                    <Route path="/world/:id" element={<WorldRealmDetail />} />
-
-                    <Route path="/forest" element={<DreamForestHub />} />
-                    <Route path="/create" element={<CreateStoryFlow />} />
-                    <Route path="/generate" element={<CreateStoryFlow />} />
-                    <Route path="/story/:id" element={<StoryViewPage />} />
-                    <Route path="/library" element={<WoodenBookshelf />} />
-                    <Route path="/my-stories" element={<WoodenBookshelf />} />
-                    <Route path="/narrator" element={<StoryViewPage />} />
-                    <Route path="/rewards" element={<TreasureRoom />} />
-                    <Route path="/achievements" element={<TreasureRoom />} />
-                    <Route path="/parents" element={<ParentDashboardPage />} />
-                    <Route path="/gallery" element={<GalleryPage />} />
-                    <Route path="/pricing" element={<PricingPage />} />
-                    <Route path="/faq" element={<FAQPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/profile" element={<ChildBedroom />} />
-                    <Route path="/login" element={<AuthPage />} />
-                  </Routes>
-                </div>
-
-                {/* Floating Bottom Glass Navigation Dock */}
-                <FloatingDock />
-
-                {/* Auth Modal */}
-                <AuthModal />
-              </div>
+              <AppInner />
             </Router>
           </EnvironmentProvider>
         </StoryProvider>
