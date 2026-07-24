@@ -119,12 +119,6 @@ const AppInner: React.FC = () => {
   );
 };
 
-      {/* Auth Modal */}
-      <AuthModal />
-    </div>
-  );
-};
-
 export const App: React.FC = () => {
   return (
     <ThemeProvider>
