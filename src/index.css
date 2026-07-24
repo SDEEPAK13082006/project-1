@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen font-fredoka bg-[#0E1A40] text-slate-100 selection:bg-dream-purple/30 selection:text-dream-cream overflow-x-hidden antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-card-dream {
+    @apply bg-[#152454]/80 backdrop-blur-xl border border-dream-purple/30 shadow-glass-magic rounded-3xl;
+  }
+  
+  .glass-pill-dream {
+    @apply bg-[#1E2E6B]/70 backdrop-blur-md border border-dream-sky/30 shadow-md rounded-full;
+  }
+  
+  .glass-input-dream {
+    @apply bg-[#182A60]/90 backdrop-blur-md border border-dream-purple/40 focus:border-dream-gold focus:ring-4 focus:ring-dream-gold/30 text-white rounded-2xl transition-all;
+  }
+  
+  .text-gradient-dream {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-dream-sky via-dream-pink to-dream-gold;
+  }
+
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-dream-gold via-yellow-200 to-amber-400;
+  }
+
+  .bg-gradient-magic {
+    @apply bg-gradient-to-r from-dream-purple via-dream-pink to-dream-sky;
+  }
+
+  /* Paper texture effect for storybooks */
+  .paper-texture {
+    background-color: #FFF7E8;
+    background-image: radial-gradient(#E8D5B7 0.75px, transparent 0.75px), radial-gradient(#E8D5B7 0.75px, #FFF7E8 0.75px);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+  }
+
+  /* Wooden shelf styling */
+  .wood-shelf {
+    background: linear-gradient(180deg, #8B5E3C 0%, #6F4528 70%, #523118 100%);
+    box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Button ripple glow effect */
+  .button-glow-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-glow-purple active:scale-95;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(14, 26, 64, 0.9);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(138, 92, 246, 0.6);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 217, 94, 0.8);
+}

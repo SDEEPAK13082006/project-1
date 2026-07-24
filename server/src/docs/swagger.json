@@ -1,0 +1,70 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "DreamVerse AI Enterprise REST API",
+    "version": "2.0.0",
+    "description": "Production-ready scalable backend API for DreamVerse AI Bedtime Storytelling Platform"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register Parent Account",
+        "responses": { "201": { "description": "User registered" } }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "User Login",
+        "responses": { "200": { "description": "Login successful" } }
+      }
+    },
+    "/api/story-worlds": {
+      "get": {
+        "summary": "Get all 12 Story Worlds",
+        "responses": { "200": { "description": "Story worlds returned" } }
+      }
+    },
+    "/api/characters": {
+      "get": {
+        "summary": "Get Recurring Character Database & Memories",
+        "responses": { "200": { "description": "Characters returned" } }
+      }
+    },
+    "/api/stories/generate": {
+      "post": {
+        "summary": "Generate AI Bedtime Story with Emotion, Character Memory, Quiz & Vocab",
+        "responses": { "201": { "description": "Story generated" } }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "Multi-field Search across stories, animals, worlds, and morals",
+        "responses": { "200": { "description": "Search results returned" } }
+      }
+    },
+    "/api/recommendations": {
+      "get": {
+        "summary": "Mood & Age-Based Recommendation Engine",
+        "responses": { "200": { "description": "Recommendations returned" } }
+      }
+    },
+    "/api/dream-room": {
+      "get": {
+        "summary": "Get Dream Room Configuration",
+        "responses": { "200": { "description": "Dream room state returned" } }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "summary": "Get Parent Analytics Stats",
+        "responses": { "200": { "description": "Analytics returned" } }
+      }
+    }
+  }
+}
